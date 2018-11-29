@@ -6,3 +6,4 @@
 VK: <https://vk.com/id146058566>
 ***
 ## [ НАЗВАНИЕ ПРОЕКТА ]
+“HSE initiatives HSE-I”
