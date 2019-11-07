@@ -1,0 +1,36 @@
+package ru.misha.telegram;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class TestCommand implements Command {
+    String chatID;
+    String messageText;
+
+    public TestCommand(String chatID, String messageText) {
+        this.chatID = chatID;
+        this.messageText = messageText;
+    }
+
+    @Override
+    public String Run() {
+        String botMessage = "";
+        String numberString = Data.themeMemory.get(chatID);
+        int numberOfTheme = Integer.valueOf(numberString);
+        if (messageText.isEmpty()) { //в этом if-е происходит выбор рандомного теста и выдача первого вопроса
+            int testNumber = getNextTestNumber(numberOfTheme);
+            if (testNumber == -1) {
+                Data.lastCommandMemory.put(chatID, "");
+                return "Поздравляем! Вы решили все задачи, ждите обновления.";
+            }
+            Data.testMemory.put(chatID,testNumber);
+            int i = 0;
+            Data.testAnswersMemory.put(chatID, new ArrayList<String>());
+            Data.questionNumberMemory.put(chatID, i);
+            botMessage = botMessage + Data.themes.get(numberOfTheme - 1).themeTests.get(testNumber).questions.get(i).questionText;
+        } else { //все остальные вопросы
+            int testNumber = Data.testMemory.get(chatID);
+            int questionNumber = Data.questionNumberMemory.get(chatID); //todo сохранить ответ куда нибудь
+            questionNumber++;
+            ArrayList<String> answers = Data.testAnswersMemory.get(chatID);
+            answers.add(messageText);
